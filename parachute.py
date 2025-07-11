@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 
 class Parachute:
     def __init__(self, diameter, drag_coefficient, suspension_line_length = None, 
-                 shape="hemispherical", inflation_time=None, opening_force_coefficient=None):
+                 shape="hemispherical", inflation_time=None, opening_force_coefficient=None, mass=None):
         """
         Initializes a parachute object
 
@@ -18,6 +18,7 @@ class Parachute:
         """
         self.diameter = diameter
         self.drag_coefficient = drag_coefficient
+        self.mass = mass
         self.shape = shape.lower()  # Lowercase a text
 
         self.calculate_drag_area()  # Calculate the effective drag area based on the shape and diameter 
@@ -137,6 +138,8 @@ class Parachute:
             f"Parachute data:\n"
             f"  Shape: {self.shape}\n"
             f"  Diameter: {self.diameter} m\n"
+            f"  Suspension Line Length: {self.suspension_line_length} m\n"
+            f"  Mass: {self.mass} kg\n"
             f"  Drag Coefficient (Cd): {self.drag_coefficient}\n"
             f"  Opening Force Coefficient (Cx): {self.opening_force_coefficient}\n"
             f"  Inflation Time: {self.inflation_time} s\n"
