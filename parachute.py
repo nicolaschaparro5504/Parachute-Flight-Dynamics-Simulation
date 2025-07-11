@@ -1,4 +1,5 @@
 import math
+import matplotlib.pyplot as plt
 
 class Parachute:
     def __init__(self, diameter, drag_coefficient, suspension_line_length = None, 
@@ -18,7 +19,8 @@ class Parachute:
         self.diameter = diameter
         self.drag_coefficient = drag_coefficient
         self.shape = shape.lower()  # Lowercase a text
-        self.current_time = 0
+
+        self.calculate_drag_area()  # Calculate the effective drag area based on the shape and diameter 
 
         # If the user does not provide a suspension line length,
         # estimate it based on the diameter and shape of the parachute    
@@ -75,6 +77,9 @@ class Parachute:
         }
         factor = ratios.get(shape.lower(), 1.2)  # The factor depends on the shape of the parachute
         return factor * diameter
+    
+    def print_area(self):
+        print(f"Drag area for {self.shape} parachute is: {self.area:.4f} m²")
 
     def calculate_drag_area(self):
         """
@@ -82,14 +87,60 @@ class Parachute:
         """
         if self.shape == "square":
             surface_area = self.diameter ** 2  # Diameter is the side length for square parachutes
-            print(f"Drag area for {self.shape} parachute is: {self.drag_coefficient * surface_area:.4f} m²")
+            self.area = self.drag_coefficient * surface_area
+            
         else:
             surface_area = (math.pi / 4) * self.diameter ** 2  # Circular by default
-            print(f"Drag area for {self.shape} parachute is: {self.drag_coefficient * surface_area:.4f} m²")
+            self.area = self.drag_coefficient * surface_area
+            
+    def get_inflated_drag_area(self, time):
+        """
+        Method to get the inflated drag area at a given time.    
+        """
+        if time >= self.inflation_time:
+            area = self.area
+        else:
+            area = self.area * (time / self.inflation_time) ** 2
+        return area
+
+    def is_fully_inflated(self, time):
+        """ 
+        Method to check if the parachute is fully inflated at a given time 
+        """
+        return time >= self.inflation_time
+
+    def plot_inflation_profile(self, t_max=None, steps=100):
+        """
+        Method to plot the inflation profile of the parachute over time
+        If t_max is not provided, it defaults to 1.5 times the inflation time
+        """
+        if t_max is None:
+            t_max = self.inflation_time * 1.5
+
+        # times: list of time points at which the drag area will be evaluated and plotted
+        times = [t_max * i / steps for i in range(steps + 1)] 
+        areas = [self.get_inflated_drag_area(t) for t in times]
+
+        plt.figure(figsize=(6, 4))
+        plt.plot(times, areas, label="Inflated Drag Area", color='blue')
+        plt.axvline(self.inflation_time, color='r', linestyle='--', label="Inflation Time")
+        plt.xlabel("Time [s]")
+        plt.ylabel("Effective Drag Area [m²]")
+        plt.title(f"Inflation Profile of the Parachute ({self.shape})")
+        plt.grid(True)
+        plt.legend()
+        plt.tight_layout()
+        plt.show()
 
     def parachute_data(self):
-        return (f"Parachute(shape={self.shape}, d={self.diameter} m, Cd={self.drag_coefficient}, "
-                f"Cx={self.opening_force_coefficient}, inflation_time={self.inflation_time}s, "
-                f"area={self.area:.3f} m²)")
+        print(
+            f"Parachute data:\n"
+            f"  Shape: {self.shape}\n"
+            f"  Diameter: {self.diameter} m\n"
+            f"  Drag Coefficient (Cd): {self.drag_coefficient}\n"
+            f"  Opening Force Coefficient (Cx): {self.opening_force_coefficient}\n"
+            f"  Inflation Time: {self.inflation_time} s\n"
+            f"  Area: {self.area:.3f} m²"
+        )
 
-p1 = Parachute(10, 1.5, shape="square")
+p1 = Parachute(10, 1.5, shape="reefed")
