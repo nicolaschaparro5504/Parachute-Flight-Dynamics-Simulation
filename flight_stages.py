@@ -160,6 +160,74 @@ class FlightStages:
         plt.tight_layout()
         plt.show()
         print(f"\nHorizontal displacement: {x[-1]:.2f} m")
+    
+    def plot_velocity(self):
+        """
+        Plot velocity vs time, showing deployment and inflation stages
+        """
+        t, _, v, _, _ = self.generate_trajectory()
+        plt.figure(figsize=(8, 5))
+        plt.plot(t, v, label="Velocity", color='red')
+        plt.axvline(self.t_deploy, color='orange', linestyle='--', label="Deployment")
+        plt.axvline(self.t_deploy + self.t_inflation, color='green', linestyle='--', label="End of Inflation")
+        plt.xlabel("Time [s]")
+        plt.ylabel("Velocity [m/s]")
+        plt.title("Velocity with Deployment and Inflation Stages")
+        plt.grid(True)
+        plt.legend()
+        plt.tight_layout()
+        plt.show()
+
+    def plot_acceleration(self):
+        """
+        Plot acceleration vs time, showing deployment and inflation stages
+        """
+        t, _, _, _, a = self.generate_trajectory()
+        plt.figure(figsize=(8, 5))
+        plt.plot(t, a, label="Acceleration", color='green')
+        plt.axvline(self.t_deploy, color='orange', linestyle='--', label="Deployment")
+        plt.axvline(self.t_deploy + self.t_inflation, color='blue', linestyle='--', label="End of Inflation")
+        plt.xlabel("Time [s]")
+        plt.ylabel("Acceleration [m/s²]")
+        plt.title("Acceleration with Deployment and Inflation Stages")
+        plt.grid(True)
+        plt.legend()
+        plt.tight_layout()
+        plt.show()
+
+
+    def simulate(self):
+        """
+        Run the simulation and plot all trajectories
+        """
+        self.plot_trajectory()
+        self.plot_velocity()
+        self.plot_acceleration()
+
+    def get_state_at_time(self, time_query, dt=0.1):
+        """
+        Print the state (altitude, velocity, acceleration, horizontal position) at a specific time.
+        If the time is outside the simulation, show the last state.
+        """
+        t, z, v, x, a = self.generate_trajectory(dt=dt)
+
+        if time_query > t[-1]: # If the queried time exceeds the simulation time, show the last state
+            print(f"\n[WARNING] The time consulted ({time_query:.1f} s) exceeds the simulated interval (up to {t[-1]:.2f} s). Showing last state:\n")        
+            idx = -1 # Last index
+        else:
+            idx = np.abs(t - time_query).argmin()  # Find the closest index to the queried time
+            # argmin returns the index of the minimum value in the array, which is the closest time to the query
+
+        state = {
+            "Time [s]": t[idx],
+            "Altitude [m]": z[idx],
+            "Vertical Speed [m/s]": v[idx],
+            "Acceleration [m/s²]": a[idx],
+            "Horizontal Position [m]": x[idx]
+        }
+
+        for k, val in state.items():  # Format and print the state
+            print(f"{k:>25}: {val:.3f}")  # k:>25 aligns the key to the right with a width of 25 characters
 
 td = FlightStages(mass=80, drag_coefficient=1.5, area=0.5, z0=1000, t_max=60, horizontal_speed=1)
 
