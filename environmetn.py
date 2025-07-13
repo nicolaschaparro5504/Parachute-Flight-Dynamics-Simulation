@@ -38,3 +38,5 @@ class Environment:
         print(f"Air Density: {self.density:.3f} kg/m³")
         print(f"Wind (horizontal): {self.wind_horizontal} m/s (Direction: {self.wind_direction}°)")
         print(f"Wind (vertical): {self.wind_vertical} m/s")
+
+env = Environment()
