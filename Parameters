@@ -1,0 +1,55 @@
+import math
+
+# Constantes físicas
+g = 9.81  # Aceleración gravitacional (m/s^2)
+R = 287.05  # Constante del gas ideal para el aire (J/kg·K)
+
+# ----------------------------
+# Parámetros del sistema
+# ----------------------------
+
+# 1. Masa total del sistema (persona + paracaídas)
+mass = 80.0  # kg (ajustar según el peso del paracaidista y equipo)
+
+# 2. Área efectiva del paracaídas desplegado
+area = 25.0  # m^2 (ajustar según el tipo de paracaídas)
+
+# 3. Coeficiente de arrastre (Cd)
+# (ajustar según el tipo de paracaídas y condiciones)
+cd = 1.5
+
+# 4. Altitud inicial del salto
+altitude = 4000  # metros
+
+# 5. Temperatura ambiente a esa altitud
+temperature = 273.15  # K (0°C por defecto)
+
+# 6. Densidad del aire a esa altitud (puede refinarse con modelo ISA)
+def air_density(altitude, temperature):
+    # Modelo simplificado usando ley de los gases ideales
+    P0 = 101325  # Presión al nivel del mar (Pa)
+    lapse_rate = 0.0065  # K/m
+    T0 = 288.15  # K (15 °C)
+    exponent = g / (R * lapse_rate)
+    pressure = P0 * (1 - lapse_rate * altitude / T0)**exponent
+    density = pressure / (R * temperature)
+    return density
+
+rho = air_density(altitude, temperature)
+
+# 7. Velocidad terminal estimada
+def terminal_velocity(mass, g, rho, cd, area):
+    return math.sqrt((2 * mass * g) / (rho * cd * area))
+
+vt = terminal_velocity(mass, g, rho, cd, area)
+
+# ----------------------------
+# Imprimir parámetros
+# ----------------------------
+print("=== PARÁMETROS DEL DESCENSO DE PARACAÍDAS ===")
+print(f"Masa total: {mass} kg")
+print(f"Área del paracaídas: {area} m^2")
+print(f"Coeficiente de arrastre (Cd): {cd}")
+print(f"Altitud inicial: {altitude} m")
+print(f"Densidad del aire estimada: {rho:.3f} kg/m^3")
+print(f"Velocidad terminal estimada: {vt:.2f} m/s")
