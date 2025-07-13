@@ -48,12 +48,11 @@ class Payload:
         print(f"\n--- Payload Report: {self.name} ---")
         print(f"Mass: {self.mass} kg")
         print(f"Shape: {self.shape}")
-        print(f"Dimensions (W x H x D): {self.width} x {self.height} x {self.depth} meters")
-        print(f"Volume: {self.volume():.2f} m³")
-        print(f"Density: {self.density():.2f} kg/m³")
+        print(f"Volume: {self.volume():.3f} m³")
+        print(f"Density: {self.density():.3f} kg/m³")
         cog = self.center_of_gravity()
-        print(f"Center of Gravity (x, y, z): ({cog[0]:.2f}, {cog[1]:.2f}, {cog[2]:.2f})")
-
+        print(f"Center of Gravity (x, y, z): ({cog[0]:.3f}, {cog[1]:.3f}, {cog[2]:.3f})")
+        print(f"Frontal Area: {self.frontal_area():.3f} m²")
 
 # Create a Payload object for a CubeSat
 cubesat = Payload(
