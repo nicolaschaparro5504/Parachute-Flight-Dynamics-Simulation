@@ -2,8 +2,8 @@ import math
 import matplotlib.pyplot as plt
 
 class Parachute:
-    def __init__(self, diameter, drag_coefficient, suspension_line_length = None, 
-                 shape="hemispherical", inflation_time=None, opening_force_coefficient=None, mass=None):
+    def __init__(self, diameter, drag_coefficient, mass, suspension_line_length = None, 
+                 shape="hemispherical", inflation_time=None, opening_force_coefficient=None):
         """
         Initializes a parachute object
 
@@ -88,11 +88,11 @@ class Parachute:
         """
         if self.shape == "square":
             surface_area = self.diameter ** 2  # Diameter is the side length for square parachutes
-            self.area = self.drag_coefficient * surface_area
+            self.drag_area = self.drag_coefficient * surface_area
             
         else:
             surface_area = (math.pi / 4) * self.diameter ** 2  # Circular by default
-            self.area = self.drag_coefficient * surface_area
+            self.drag_area = self.drag_coefficient * surface_area
             
     def get_inflated_drag_area(self, time):
         """
@@ -146,4 +146,4 @@ class Parachute:
             f"  Area: {self.area:.3f} m²"
         )
 
-p1 = Parachute(10, 1.5, shape="reefed")
+p1 = Parachute(10, 1.5, mass= 5, shape="reefed")
