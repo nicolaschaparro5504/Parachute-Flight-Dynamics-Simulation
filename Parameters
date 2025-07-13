@@ -1,55 +1,40 @@
 import math
 
-# Constantes físicas
-g = 9.81  # Aceleración gravitacional (m/s^2)
-R = 287.05  # Constante del gas ideal para el aire (J/kg·K)
+# Physical constants
+g = 9.81  # m/s², gravitational acceleration
+R = 287.05  # J/(kg·K), specific gas constant for dry air
 
 # ----------------------------
-# Parámetros del sistema
+# ENVIRONMENTAL PARAMETERS
 # ----------------------------
 
-# 1. Masa total del sistema (persona + paracaídas)
-mass = 80.0  # kg (ajustar según el peso del paracaidista y equipo)
+# 1. Initial altitude (m)
+altitude = 4000  # meters above sea level
 
-# 2. Área efectiva del paracaídas desplegado
-area = 25.0  # m^2 (ajustar según el tipo de paracaídas)
+# 2. Ambient temperature (K)
+# Approximate lapse rate: 6.5 °C decrease per 1000 m (ISA model)
+T0 = 288.15  # K, temperature at sea level (~15 °C)
+lapse_rate = 0.0065  # K/m
+temperature = T0 - lapse_rate * altitude
 
-# 3. Coeficiente de arrastre (Cd)
-# (ajustar según el tipo de paracaídas y condiciones)
-cd = 1.5
+# 3. Atmospheric pressure (Pa) using simplified barometric model
+P0 = 101325  # Pa, pressure at sea level
+exponent = g / (R * lapse_rate)
+pressure = P0 * (1 - lapse_rate * altitude / T0) ** exponent
 
-# 4. Altitud inicial del salto
-altitude = 4000  # metros
+# 4. Air density (kg/m³)
+density = pressure / (R * temperature)
 
-# 5. Temperatura ambiente a esa altitud
-temperature = 273.15  # K (0°C por defecto)
+# 5. Horizontal wind speed (can vary with altitude)
+wind_speed_horizontal = 5.0  # m/s towards the east (for example)
+wind_direction = 90.0  # degrees from north (0°: north, 90°: east)
 
-# 6. Densidad del aire a esa altitud (puede refinarse con modelo ISA)
-def air_density(altitude, temperature):
-    # Modelo simplificado usando ley de los gases ideales
-    P0 = 101325  # Presión al nivel del mar (Pa)
-    lapse_rate = 0.0065  # K/m
-    T0 = 288.15  # K (15 °C)
-    exponent = g / (R * lapse_rate)
-    pressure = P0 * (1 - lapse_rate * altitude / T0)**exponent
-    density = pressure / (R * temperature)
-    return density
-
-rho = air_density(altitude, temperature)
-
-# 7. Velocidad terminal estimada
-def terminal_velocity(mass, g, rho, cd, area):
-    return math.sqrt((2 * mass * g) / (rho * cd * area))
-
-vt = terminal_velocity(mass, g, rho, cd, area)
+# 6. Vertical wind speed (updrafts or downdrafts)
+wind_speed_vertical = 0.5  # m/s, positive = upward
 
 # ----------------------------
-# Imprimir parámetros
+# Print environmental parameters
 # ----------------------------
-print("=== PARÁMETROS DEL DESCENSO DE PARACAÍDAS ===")
-print(f"Masa total: {mass} kg")
-print(f"Área del paracaídas: {area} m^2")
-print(f"Coeficiente de arrastre (Cd): {cd}")
-print(f"Altitud inicial: {altitude} m")
-print(f"Densidad del aire estimada: {rho:.3f} kg/m^3")
-print(f"Velocidad terminal estimada: {vt:.2f} m/s")
+print("=== ENVIRONMENTAL PARAMETERS FOR PARACHUTE DESCENT ===")
+print(f"Initial altitude: {altitude} m")
+
