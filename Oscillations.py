@@ -1,19 +1,12 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from parachute import Parachute
+from flight_stages import td
 
 class ParachuteOscillationEstimator:
     def __init__(self, parachute: Parachute, mass=80, damping_ratio=0.15, natural_freq=0.8, initial_angle=5.0, z0=1000, t_max=60):
         """
         Estimate angle of attack oscillations during descent using parachute parameters.
-        Args:
-            parachute (Parachute): Parachute object
-            mass (float): Mass of the system (kg)
-            damping_ratio (float): Damping ratio (ζ)
-            natural_freq (float): Natural frequency (ω_n) [rad/s]
-            initial_angle (float): Initial angle of attack [deg]
-            z0 (float): Initial altitude [m]
-            t_max (float): Maximum simulation time [s]
         """
         self.parachute = parachute
         self.mass = mass
@@ -23,16 +16,9 @@ class ParachuteOscillationEstimator:
         self.z0 = z0
         self.t_max = t_max
 
-    def descent_velocity(self):
-        """
-        Estimate steady descent velocity using drag area from parachute.
-        v = sqrt((2 * m * g) / (rho * Cd * A))
-        """
-        g = 9.81
-        rho = 1.225  # air density [kg/m^3]
-        CdA = self.parachute.area
-        v = np.sqrt((2 * self.mass * g) / (rho * CdA))
-        return v
+        # Update td with real CdA from parachute
+        td.mass = self.mass
+        td.cd_area = self.parachute.area
 
     def simulate(self, dt=0.1):
         """
@@ -43,7 +29,8 @@ class ParachuteOscillationEstimator:
         omega_d = self.omega_n * np.sqrt(1 - self.zeta**2)
         theta = self.theta0 * np.exp(-self.zeta * self.omega_n * t) * np.cos(omega_d * t)
         theta_deg = np.rad2deg(theta)
-        v = self.descent_velocity()
+
+        v = td.terminal_velocity()
         z = self.z0 - v * t
         z[z < 0] = 0
         return t, theta_deg, z
@@ -68,8 +55,15 @@ class ParachuteOscillationEstimator:
         plt.tight_layout()
         plt.show()
 
-# Example usage:
+# Example usage
 if __name__ == "__main__":
-    # Use Parachute class from parachute.py
     p1 = Parachute(diameter=10, drag_coefficient=1.5, shape="reefed", mass=80)
-    estimator = ParachuteOscillationEstimator(parachute=p1, mass=80, damping_ratio=0.18, natural_freq=0.7, initial_angle=7.0, z0=1000, t_max=60)
+    estimator = ParachuteOscillationEstimator(
+        parachute=p1,
+        damping_ratio=0.18,
+        natural_freq=0.7,
+        initial_angle=7.0,
+        z0=1000,
+        t_max=60
+    )
+    estimator.plot_oscillations()
