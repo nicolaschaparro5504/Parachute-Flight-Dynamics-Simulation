@@ -106,5 +106,3 @@ cubesat = Payload(
     height=0.2,             # Height in meters
     depth=0.2               # Depth in meters
 )
-
-cubesat.report()

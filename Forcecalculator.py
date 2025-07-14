@@ -20,6 +20,18 @@ class ForcesCalculator:
     def snatch_force(self, delta_v, line_length, stiffness=1e5, n_lines=4):
         elongation = delta_v / (2 * line_length)
         return n_lines * stiffness * elongation
+    
+    def report(self):
+        """
+        Print a report of the forces acting on the payload.
+        """
+        print(f"\n--- Forces Report for {self.payload.name} ---")
+        print(f"Environment Density: {self.env.density:.3f} kg/m³")
+        print(f"Payload Mass: {self.payload.mass:.2f} kg")
+        print(f"Frontal Area: {self.payload.frontal_area():.3f} m²")
+        print(f"Drag Force at terminal velocity: {self.drag_force(td.terminal_velocity(), 1.5):.2f} N")
+        print(f"Opening Force: {self.opening_force(td.terminal_velocity(), 1.75, 0.5):.2f} N")
+        print(f"Snatch Force: {self.snatch_force(td.terminal_velocity(), 5.0):.2f} N")
 
 # ----------------------------- Demo ----------------------------------
 

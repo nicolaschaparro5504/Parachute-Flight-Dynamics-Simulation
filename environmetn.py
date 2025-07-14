@@ -1,5 +1,3 @@
-# environment.py
-
 import math
 
 class Environment:

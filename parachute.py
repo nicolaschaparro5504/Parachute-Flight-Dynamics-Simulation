@@ -80,7 +80,7 @@ class Parachute:
         return factor * diameter
     
     def print_area(self):
-        print(f"Drag area for {self.shape} parachute is: {self.area:.4f} m²")
+        print(f"Drag area for {self.shape} parachute is: {self.drag_area:.4f} m²")
 
     def calculate_drag_area(self):
         """
@@ -99,9 +99,9 @@ class Parachute:
         Method to get the inflated drag area at a given time.    
         """
         if time >= self.inflation_time:
-            area = self.area
+            area = self.drag_area
         else:
-            area = self.area * (time / self.inflation_time) ** 2
+            area = self.drag_area * (time / self.inflation_time) ** 2
         return area
 
     def is_fully_inflated(self, time):
