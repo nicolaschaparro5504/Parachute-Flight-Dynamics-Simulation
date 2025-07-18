@@ -2,7 +2,9 @@ import math
 from Payload import cubesat
 from environmetn import env
 from flight_stages import td 
-class ForcesCalculator:
+from report import Report
+
+class ForcesCalculator(Report):
     def __init__(self, environment, payload):
         self.env = environment
         self.payload = payload

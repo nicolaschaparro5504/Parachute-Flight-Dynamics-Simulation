@@ -1,7 +1,18 @@
 import math
 import matplotlib.pyplot as plt
+from report import Report
 
-class Parachute:
+class Parachute(Report):
+
+    def report(self):
+        print(f"\n--- Parachute Report ---")
+        print(f"Shape: {self.shape}")
+        print(f"Diameter: {self.diameter} m")
+        print(f"Mass: {self.mass} kg")
+        print(f"Drag Coefficient: {self.drag_coefficient}")
+        print(f"Drag Area: {self.drag_area:.3f} m²")
+        print(f"Inflation Time: {self.inflation_time} s")
+
     def __init__(self, diameter, drag_coefficient, mass, suspension_line_length = None, 
                  shape="hemispherical", inflation_time=None, opening_force_coefficient=None):
         """

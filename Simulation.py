@@ -70,6 +70,14 @@ def main():
     forces_calculator = ForcesCalculator(environment, payload)
     forces_calculator.report()  # Print forces report
 
+    parachute.report()  # Print parachute report
+    payload.report()    # Print payload report
+    forces_calculator.report()
+
+    reports = [payload, parachute, forces_calculator]
+    for obj in reports:
+        obj.report()
+        
 def is_fully_inflated(parachute, time):
     """
     Check if the parachute is fully inflated at a given time.

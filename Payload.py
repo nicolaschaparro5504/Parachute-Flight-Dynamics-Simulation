@@ -1,6 +1,8 @@
 import math
 
-class Payload:
+from report import Report
+
+class Payload(Report):
     def __init__(self, name, mass, shape, width, height, depth=None):
         """
         Initialize a Payload object.
