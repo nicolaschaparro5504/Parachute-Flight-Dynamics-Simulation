@@ -68,7 +68,6 @@ def main():
 
     # Forces calculation
     forces_calculator = ForcesCalculator(environment, payload)
-    forces_calculator.report()  # Print forces report
 
     parachute.report()  # Print parachute report
     payload.report()    # Print payload report
