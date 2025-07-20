@@ -1,6 +1,6 @@
 from parachute import Parachute
 from Payload import Payload
-from environmetn import Environment
+from environment import Environment
 from flight_stages import FlightStages
 from Oscillations import ParachuteOscillationEstimator
 from Forcecalculator import ForcesCalculator
