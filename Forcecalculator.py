@@ -1,20 +1,24 @@
 import math
 from Payload import cubesat
-from environmetn import env
-from flight_stages import td 
+from environment import env
+from flight_stages import td
+from parachute import p1
+from parachute import Parachute
+
 class ForcesCalculator:
-    def __init__(self, environment, payload):
+    def __init__(self, environment, payload, parachute):
+        self.parachute = parachute
         self.env = environment
         self.payload = payload
 
     def drag_force(self, velocity, drag_coefficient):
         rho = self.env.density
-        A = self.payload.frontal_area()
+        A = self.parachute.surface_area
         return 0.5 * rho * velocity**2 * A * drag_coefficient
 
     def opening_force(self, velocity, cl, l_over_d):
         rho = self.env.density
-        A = self.payload.frontal_area()
+        A = self.parachute.surface_area
         return 0.5 * cl * rho * A * velocity**2 * (1 + l_over_d)
 
     def snatch_force(self, delta_v, line_length, stiffness=1e5, n_lines=4):
@@ -36,7 +40,7 @@ class ForcesCalculator:
 # ----------------------------- Demo ----------------------------------
 
 if __name__ == "__main__":
-    calc = ForcesCalculator(env, cubesat)
+    calc = ForcesCalculator(env, cubesat, p1)
 
     velocity    = td.terminal_velocity()   
     cd          = 1.5

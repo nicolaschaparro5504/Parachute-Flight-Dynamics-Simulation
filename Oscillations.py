@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from parachute import Parachute
 from flight_stages import FlightStages
 from Payload import Payload
-from environmetn import Environment
+from environment import Environment
 
 cubesat = Payload("CubeSat-Alpha", 12.0, "cuboid", 0.2, 0.2, 0.2)
 p1 = Parachute(10, 1.5, mass=5, shape="reefed")

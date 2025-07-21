@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from parachute import Parachute
 from Payload import Payload
-from environmetn import Environment
+from environment import Environment
 
 # Initialize Payload, Parachute, and Environment objects
 cubesat = Payload("CubeSat-Alpha", 12.0, "cuboid", 0.2, 0.2, 0.2)

@@ -98,13 +98,11 @@ class Parachute(Report):
         Method to calculate the effective drag area, depending on the shape of the parachute.
         """
         if self.shape == "square":
-            surface_area = self.diameter ** 2  # Diameter is the side length for square parachutes
-            self.drag_area = self.drag_coefficient * surface_area
-            
+            self.surface_area = self.diameter ** 2  # Diameter is the side length for square parachutes
         else:
-            surface_area = (math.pi / 4) * self.diameter ** 2  # Circular by default
-            self.drag_area = self.drag_coefficient * surface_area
-            
+            self.surface_area = (math.pi / 4) * self.diameter ** 2  # Circular by default
+        self.drag_area = self.drag_coefficient * self.surface_area
+
     def get_inflated_drag_area(self, time):
         """
         Method to get the inflated drag area at a given time.    
