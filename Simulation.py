@@ -64,14 +64,9 @@ def main():
         initial_angle=5.0
     )
     estimator.plot_oscillations()
-    payload.report()  # Print payload report
 
     # Forces calculation
     forces_calculator = ForcesCalculator(environment, payload, parachute)
-
-    parachute.report()  # Print parachute report
-    payload.report()    # Print payload report
-    forces_calculator.report()
 
     reports = [payload, parachute, forces_calculator]
     for obj in reports:
